@@ -6,9 +6,16 @@ const userController = (req, res)=>{
     })
 }
 
+const register = (req, res) =>{
+    return res.status(200).json({message:"Accion de registrar usuario"})
+
+
+}
+
 
 
 //exportar acciones
 module.exports ={
-    userController
+    userController,
+    register
 }
