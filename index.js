@@ -1,6 +1,9 @@
 //conexion a la bd
+const {connection} = require('./database/connection');
 
-//crear servidor de node 
+//conectar a la bd
+connection();
+
 
 //configurar cors
 
@@ -10,4 +13,4 @@
 //cargar conf rutas 
 
 
-//Poner servidor a correr 
+//Poner servidor a escurchar peticiones http 
