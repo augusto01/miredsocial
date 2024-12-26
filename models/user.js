@@ -5,6 +5,7 @@ const UserSchema = Schema({
     name: {type: String, required: true},
     surname: String,
     username: String,
+    nick: String,
     email: {type: String, required: true},
     password:{type: String, required: true},
     rol: {type: String, default: 'role_user'},

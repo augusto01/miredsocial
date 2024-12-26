@@ -1,5 +1,6 @@
 const user = require("../models/user");
-const User = require("../models/user")
+const User = require("../models/user");
+const bcrypt = require("bcrypt");
 const userController = (req, res)=>{
 
     res.status(200).send({
@@ -7,56 +8,65 @@ const userController = (req, res)=>{
     })
 }
 
-const register = (req, res) =>{
+//==============    REGISTRAR USUARIO   =================//
 
+const register = async (req, res) => {
     const params = req.body;
-    
 
    
+    let user_save = new User(params);
 
+    // Control de usuarios duplicados
+    try {
+        const users = await User.find({
+            $or: [
+                { email: params.email.toLowerCase() },
+                { nickname: params.nick.toLowerCase() }
+            ]
+        }).exec();
 
-    
-
-    //guardar usuario 
-    let user_save = new User (params);
-    console.log(user_save)
-
-    //control de usuarios duplicados 
-    User.find({$or :[
-        {email: params.email.toLowerCase()},
-        {nickname: params.nickname.toLowerCase()}
-    ]}).exec((error, users) => {qs
-        if (error) return res.status(500).json({
-            status: "error",
-            message: "Error en la consulta!"
-        })
-
-        if (users && users.length > 0){
+        if (users && users.length > 0) {
             return res.status(200).json({
-                status:"success",
-                message: "El usuario ingresado ya existe !"
-            })
+                status: "success",
+                message: "El usuario ingresado ya existe!"
+            });
         }
 
+        // Cifrado de contraseña
+        user_save.password = await bcrypt.hash(user_save.password, 10);
 
-        return res.status(200).json({
-                status:"success",
-                message: "Usuario creado con exito !"
-        })
+        // Guardar el nuevo usuario en la base de datos
+        await user_save.save();
 
-        
-    })
+        return res.status(201).json({
+            status: "success",
+            message: "Usuario registrado correctamente!",
+            user: user_save
+        });
 
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: "error",
+            message: "Error en la consulta!"
+        });
+    }
+};
 
-    return res.status(200).json({message:"Accion de registrar usuario",params})
+//==============    LOGIN USUARIO   =================//
 
+const login =(req,res)=>{
 
+    
+    return res.status(200).json({
+        status: "success",
+        message: "funciona"
+    });
 }
-
-
 
 //exportar acciones
 module.exports ={
     userController,
-    register
+    register,
+    login
 }
