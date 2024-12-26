@@ -5,6 +5,6 @@ const userController = require('../controllers/user');
 
 //======================= RUTAS DE USUARIOS =============== 
 router.get('/test',userController.userController);
-router.get('/register',userController.register);
+router.post('/register',userController.register);
 
 module.exports = router;

@@ -27,9 +27,9 @@ const {connection} = require('./database/connection');
     const publicationRoutes = require('./routes/publication.js');
 
 
-    app.use("/api", userRoutes)
-    app.use("/api", publicationRoutes)
-    app.use("/api", followsRoutes)
+    app.use("/api/user", userRoutes)
+    app.use("/api/publication", publicationRoutes)
+    app.use("/api/follows", followsRoutes)
 
 
 
