@@ -1,9 +1,10 @@
 //dependencias 
 const express = require('express');
 const cors = require('cors');
+const {connection} = require('./database/connection');
+
 
 //conexion a la bd
-const {connection} = require('./database/connection');
 connection();
 
 
