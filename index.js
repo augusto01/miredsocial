@@ -3,8 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const {connection} = require('./database/connection');
 
-//================ CONEXION BD ================
-connection();
+//================ CONEXION BD ===================
+    connection();
 
 
 
