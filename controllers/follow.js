@@ -1,5 +1,5 @@
 
-const pruebaFollow = (req, res)=>{
+const followController = (req, res)=>{
 
     res.status(200).send({
         message: 'Mensaje enviado desde el controlador :controllers/follow.js'
@@ -10,5 +10,5 @@ const pruebaFollow = (req, res)=>{
 
 //exportar acciones
 module.exports ={
-    pruebaFollow
+    followController
 }

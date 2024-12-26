@@ -1,7 +1,5 @@
 
-
-
-const pruebaUser = (req, res)=>{
+const userController = (req, res)=>{
 
     res.status(200).send({
         message: 'Mensaje enviado desde el controlador :controllers/user.js'
@@ -12,5 +10,5 @@ const pruebaUser = (req, res)=>{
 
 //exportar acciones
 module.exports ={
-    pruebaUser
+    userController
 }

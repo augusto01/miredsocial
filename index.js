@@ -24,6 +24,14 @@ app.use(express.urlencoded({extended:true}));
 
 
 //rutas
+const userRoutes = require('./routes/user.js');
+const followsRoutes = require('./routes/follow.js');
+const publicationRoutes = require('./routes/publication.js');
+
+
+app.use("/api", userRoutes)
+app.use("/api", publicationRoutes)
+app.use("/api", followsRoutes)
 
 app.get('/ruta_prueba', (req, res) =>{
     return res.status(200).json({

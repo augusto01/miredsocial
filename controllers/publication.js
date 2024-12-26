@@ -1,5 +1,5 @@
 
-const pruebaPublication = (req, res)=>{
+const publicationController = (req, res)=>{
 
     res.status(200).send({
         message: 'Mensaje enviado desde el controlador :controllers/publication.js'
@@ -10,5 +10,5 @@ const pruebaPublication = (req, res)=>{
 
 //exportar acciones
 module.exports ={
-    pruebaPublication
+    publicationController
 }
