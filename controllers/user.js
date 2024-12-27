@@ -1,7 +1,7 @@
 const user = require("../models/user");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const jwt_service = require ("../services/jwt.js")
+const jwt_service = require("../services/jwt.js")
 const jwt = require("jsonwebtoken");
 
 const userController = (req, res) => {
@@ -82,7 +82,7 @@ const login = async (req, res) => {
                 status: "error",
                 message: "El usuario no existe!"
             });
-        } 
+        }
 
         const flag_pwd = bcrypt.compareSync(params.password, user.password);
         if (!flag_pwd) {
@@ -112,7 +112,7 @@ const login = async (req, res) => {
             },
             token
         });
-        
+
     } catch (error) {
         console.error("Error en el inicio de sesión:", error); // Log para depuración
         return res.status(500).json({
@@ -123,10 +123,44 @@ const login = async (req, res) => {
     }
 };
 
+//==============    MOSTRAR PERFIL   =================//
+const profile = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        // Utiliza await para obtener el perfil del usuario
+        const userProfile = await User.findById(id);
+        
+        // Verifica si el usuario existe
+        if (!userProfile) {
+            return res.status(404).json({
+                status: "error",
+                message: "El usuario no existe!"
+            });
+        }
+
+        // Respuesta exitosa
+        return res.status(200).json({
+            status: "success",
+            user: userProfile
+        });
+
+    } catch (error) {
+        console.error("Error al mostrar perfil:", error); // Log para depuración
+        return res.status(500).json({
+            status: "error",
+            message: "Error del servidor",
+            error: error.message
+        });
+    }
+};
+
+
 
 //exportar acciones
 module.exports = {
     userController,
     register,
     login,
+    profile
 };
