@@ -55,14 +55,28 @@ const register = async (req, res) => {
 
 //==============    LOGIN USUARIO   =================//
 
-const login =(req,res)=>{
-
-    
-    return res.status(200).json({
-        status: "success",
-        message: "funciona"
-    });
+const login = async  (req,res)=>{
+    try{
+        const params = req.body;
+        const user = await User.findOne({email: params.email});
+        if(!user){
+            return res.status(404).json("El usuario no existe!");
+        }else{
+            return res.status(200).json(user);
+            //logica para verificar contraseña
+        }    
+        
+    }catch(error){
+        return res.status(500).json({
+            message: "Error del servidor",
+            error: error.message
+        })
+    }
 }
+
+
+
+
 
 //exportar acciones
 module.exports ={
