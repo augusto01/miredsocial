@@ -1,7 +1,9 @@
 const user = require("../models/user");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const jwt = require ("../services/jwt.js")
+const jwt_service = require ("../services/jwt.js")
+const jwt = require("jsonwebtoken");
+
 const userController = (req, res) => {
     res.status(200).send({
         message: "Mensaje enviado desde el controlador :controllers/user.js",
@@ -65,44 +67,62 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const params = req.body;
+
+        // Validar entrada
+        if (!params.email || !params.password) {
+            return res.status(400).json({
+                status: "error",
+                message: "Email y contraseña son requeridos."
+            });
+        }
+
         const user = await User.findOne({ email: params.email });
         if (!user) {
-            return res.status(404).json("El usuario no existe!");
-        } else {
+            return res.status(404).json({
+                status: "error",
+                message: "El usuario no existe!"
+            });
+        } 
 
-            let flag_pwd = bcrypt.compareSync(params.password, user.password)
-            if (!flag_pwd) {
-                return res.status(404).json({
-                    error: "Contraseña incorrecta!"
-                })
-            }
-
-            const token = jwt.createToken(user)
-
-            return res.status(200).json({
-                status: "success",
-                message: "Inicio de sesión exitoso",
-                user: {
-                    id: user._id,
-                    name: user.name,
-                    lastname: user.surname,
-                    nickname: user.nickname,
-                    email: user.email,
-                    rol: user.rol,
-                    image: user.image,
-                    fecha_creacion: user.creted_at
-                },
-                token
-            })
-
+        const flag_pwd = bcrypt.compareSync(params.password, user.password);
+        if (!flag_pwd) {
+            return res.status(401).json({
+                status: "error",
+                message: "Contraseña incorrecta!"
+            });
         }
+
+        const token = jwt_service.createToken(user);
+        const decodedToken = jwt.verify(token, jwt_service.secret);
+
+        return res.status(200).json({
+            status: "success",
+            message: "Inicio de sesión exitoso",
+            user: {
+                id: user._id,
+                name: user.name,
+                lastname: user.surname,
+                nickname: user.nickname,
+                email: user.email,
+                rol: user.rol,
+                image: user.image,
+                fecha_creacion: user.creted_at,
+                iat: decodedToken.iat,
+                exp: decodedToken.exp
+            },
+            token
+        });
+        
     } catch (error) {
+        console.error("Error en el inicio de sesión:", error); // Log para depuración
         return res.status(500).json({
+            status: "error",
             message: "Error del servidor",
-            error: error.message,
+            error: error.message
         });
     }
 };
+
 
 //exportar acciones
 module.exports = {

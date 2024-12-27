@@ -34,14 +34,12 @@ exports.auth =  (req, res, next) =>{
         
         //agregar datos a usuario 
         req.user = payload;
+        
     }catch(error){
         return res.status(404).json({
             status: "error",
             message: "Token invalido"
         })
     }
-
-   
-
     next();
 }

@@ -20,10 +20,10 @@ const createToken = (user) =>{
                     fecha_creacion: user.creted_at,
 
                     iat: moment().unix(),
-                    exp: moment().add(30, "days").unix
+                    exp: moment().add(30, "days").unix()
     }
 
-    return jwt.encode(payload, secret);
+    return jwt.sign(payload, secret);
 
 }
 
