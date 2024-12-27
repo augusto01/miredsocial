@@ -13,6 +13,14 @@ const userController = (req, res) => {
 const register = async (req, res) => {
     const params = req.body;
 
+    // Validar que los campos necesarios estén presentes
+    if (!params.email || !params.nick || !params.password) {
+        return res.status(400).json({
+            status: "error",
+            message: "Faltan campos requeridos: email, nickname o password.",
+        });
+    }
+
     let user_save = new User(params);
 
     // Control de usuarios duplicados
@@ -25,8 +33,8 @@ const register = async (req, res) => {
         }).exec();
 
         if (users && users.length > 0) {
-            return res.status(200).json({
-                status: "success",
+            return res.status(409).json({ // Cambié el código de estado a 409 (Conflict)
+                status: "error",
                 message: "El usuario ingresado ya existe!",
             });
         }
@@ -50,6 +58,7 @@ const register = async (req, res) => {
         });
     }
 };
+
 
 //==============    LOGIN USUARIO   =================//
 

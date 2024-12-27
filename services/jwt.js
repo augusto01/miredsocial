@@ -8,7 +8,7 @@ const secret = "CLAVE_SECRETA_del_proyecto_DE_LA_RED_soCIAL_987987";
 
 
 //generar token 
-exports. createToken = (user) =>{
+const createToken = (user) =>{
     const payload = {
                     id: user._id,
                     name: user.name,
@@ -24,6 +24,12 @@ exports. createToken = (user) =>{
     }
 
     return jwt.encode(payload, secret);
+
+}
+
+module.exports = {
+    secret,
+    createToken,
 
 }
 
