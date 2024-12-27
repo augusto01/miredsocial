@@ -1,6 +1,7 @@
 const user = require("../models/user");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const jwt = require ("../services/jwt.js")
 const userController = (req, res) => {
     res.status(200).send({
         message: "Mensaje enviado desde el controlador :controllers/user.js",
@@ -59,32 +60,32 @@ const login = async (req, res) => {
         if (!user) {
             return res.status(404).json("El usuario no existe!");
         } else {
-            
-            
+
             let flag_pwd = bcrypt.compareSync(params.password, user.password)
-            if(!flag_pwd){
+            if (!flag_pwd) {
                 return res.status(404).json({
                     error: "Contraseña incorrecta!"
                 })
             }
 
+            const token = jwt.createToken(user)
+
             return res.status(200).json({
                 status: "success",
-                message : "Inicio de sesion exitoso", 
-                user:{
+                message: "Inicio de sesión exitoso",
+                user: {
                     id: user._id,
                     name: user.name,
-                    lastname: user.surname ,
+                    lastname: user.surname,
                     nickname: user.nickname,
                     email: user.email,
                     rol: user.rol,
                     image: user.image,
-                    fecha_creacion : user.creted_at
-                    
-
-                }
+                    fecha_creacion: user.creted_at
+                },
+                token
             })
-            
+
         }
     } catch (error) {
         return res.status(500).json({
