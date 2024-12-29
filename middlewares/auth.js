@@ -1,5 +1,5 @@
 //importar modulos 
-const jwt = require ('jwt-simple');
+const jwt = require ('jsonwebtoken');
 const moment = require ('moment')
 
 //importar secreto 
@@ -8,38 +8,35 @@ const secret =  libjwt.secret
 
 
 //middlewere de autenticacion
-exports.auth =  (req, res, next) =>{
-    if(!req.headers.authorization){
-        return res.status(403).json({
-            status: "error",
-            message: "La peticion de la cabecera no tiene autenticacion"
-        })
-    }
-
-    //limpiar el token
+exports.auth = (req, res, next) => {
+    // Obtener el token del header Authorization
     let token = req.headers.authorization.replace(/['"]+/g, '');
 
-    //decodificacion
     try {
-        let payload = jwt.decode(token, secret)
+        // Verificar y decodificar el token
+        let payload = jwt.verify(token, secret);
 
-        //comprobar expiracion 
-        if(payload.exp <= moment().unix()){
+        // Comprobar la expiración del token
+        if (payload.exp <= moment().unix()) {
             return res.status(401).json({
                 status: "error",
-                message: "token expirado",
-                error
+                message: "Token expirado"
             });
         }
-        
-        //agregar datos a usuario 
+
+        // Agregar los datos del usuario al objeto req
         req.user = payload;
-        
-    }catch(error){
+
+        // Obtener el parámetro de la URL
+        req.params.userId = req.params[0];
+
+        // Llamar al siguiente middleware
+        next();
+    } catch (error) {
         return res.status(404).json({
             status: "error",
-            message: "Token invalido"
-        })
+            message: "Token inválido"
+        });
     }
-    next();
-}
+};
+
