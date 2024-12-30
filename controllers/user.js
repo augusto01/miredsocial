@@ -167,6 +167,15 @@ const profile = async (req, res) => {
     }
 };
 
+const listar_usuarios = (req, res)=>{
+
+
+    return res.status(200).json({
+        status: "success",
+        message: "listar_usuarios funciona"
+    })
+}
+
 
 
 //exportar acciones
@@ -174,5 +183,6 @@ module.exports = {
     userController,
     register,
     login,
-    profile
+    profile,
+    listar_usuarios
 };
