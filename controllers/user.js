@@ -129,12 +129,9 @@ const login = async (req, res) => {
 const profile = async (req, res) => {
     try {
 
-        
         // Obtener y limpiar el ID de los parámetros de la ruta
         const id = req.params.id.trim();
         
-
-
         // Validar que el ID sea un ObjectId válido
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
