@@ -35,7 +35,7 @@ exports.auth = (req, res, next) => {
     } catch (error) {
         return res.status(404).json({
             status: "error",
-            message: "Token inválido"
+            message: "Token inválido"+error
         });
     }
 };

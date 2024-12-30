@@ -1,5 +1,6 @@
 const user = require("../models/user");
 const User = require("../models/user");
+const mongoose = require("mongoose")
 const bcrypt = require("bcrypt");
 const jwt_service = require("../services/jwt.js")
 const jwt = require("jsonwebtoken");
@@ -124,9 +125,23 @@ const login = async (req, res) => {
 };
 
 //==============    MOSTRAR PERFIL   =================//
+
 const profile = async (req, res) => {
     try {
-        const id = req.params.id;
+
+        
+        // Obtener y limpiar el ID de los parámetros de la ruta
+        const id = req.params.id.trim();
+        
+
+
+        // Validar que el ID sea un ObjectId válido
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                status: "error",
+                message: "ID de usuario no válido"
+            });
+        }
 
         // Utiliza await para obtener el perfil del usuario
         const userProfile = await User.findById(id);
