@@ -170,13 +170,19 @@ const profile = async (req, res) => {
 const listar_usuarios = (req, res)=>{
 
 
-    return res.status(200).json({
+    return res.status(200).send({
         status: "success",
         message: "listar_usuarios funciona"
     })
 }
 
+const list = (req, res) =>{
 
+    return res.status(200).send({
+        status: "success",
+        message: "Ruta de listado de usuarios"
+    })
+}
 
 //exportar acciones
 module.exports = {
@@ -184,5 +190,6 @@ module.exports = {
     register,
     login,
     profile,
-    listar_usuarios
+    listar_usuarios,
+    list
 };

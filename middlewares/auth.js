@@ -9,6 +9,14 @@ const secret =  libjwt.secret
 
 //middlewere de autenticacion
 exports.auth = (req, res, next) => {
+
+    if (!req.headers.authorization) {
+        return res.status(401).json({
+            status: "error",
+            message: "No se proporcionó un token"
+        });
+    }
+
     // Obtener el token del header Authorization
     let token = req.headers.authorization.replace(/['"]+/g, '');
 
